@@ -4,7 +4,7 @@ See more here:
 
 Little Commander is a two-player shooting game that can be played over a LAN connection and is built using the PyGame library.
 
-![Game Screenshot](assets/images/screenshot.png)
+![Game Screenshot](assets/Images/screenshot.png)
 
 ## Requirement
 - Python 3.0 or higher

@@ -16,8 +16,8 @@ setup(
     description='My server',
     options={'build_exe': build_exe_options},
     executables=[
-        Executable('server.py', base=base, icon='Img/ico_server.ico'),
+        Executable('server.py', base=base, icon=''),
         Executable('client.py', base=base, target_name='client.exe',
-                   icon='Img/ico_client.ico')
+                   icon='')
     ]
 )

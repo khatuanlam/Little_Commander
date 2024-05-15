@@ -138,7 +138,7 @@ def main():
     clock = pygame.time.Clock()
     n = Network()
 
-    player = int(n.getP())
+    player = int(n.getPost())
     print("You are player", player)
 
     while run:
@@ -154,15 +154,15 @@ def main():
             font = pygame.font.SysFont("comicsans", 60)
             win_text = font.render("You Win", 1, WHITE)
             lose_text = font.render("You Lose", 1, WHITE)
-            for i in range(0, len(game.players)):
-                if game.playerWin == player:
-                    win.blit(win_text, (100, 350))
-                else:
-                    win.blit(lose_text, (100, 350))
+            if game.playerWin == player:
+                win.blit(win_text, (100, 350))
+            else:
+                win.blit(lose_text, (100, 350))
             pygame.display.update()
             pygame.time.delay(4000)
             return
-        action = ""
+
+        action = ''
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
             action = "left"
