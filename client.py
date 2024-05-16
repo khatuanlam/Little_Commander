@@ -56,9 +56,6 @@ def redrawWindow(win, game, p, n):
         win.blit(step1.step, (step1.x, step1.y))
         win.blit(step2.step, (step2.x, step2.y))
 
-        draw_health(game.players[p].hp, 20, 20)
-        draw_health(game.players[1 if p == 0 else 0].hp,
-                    width - 400 - 20, 20)
         # Trạng thái hiện thị
         players_surface = []
         # Tọa độ của nhân vật
@@ -93,19 +90,18 @@ def redrawWindow(win, game, p, n):
             win.blit(players_surface[i],
                      (player.x, player.y))
         if p == 0:
-            if not game.players[p].va_cham_da and players_rect[p].x + 60.5 >= 150 and players_rect[p].x < 276.3 and players_rect[p].y < 304:
-                print("va cham da")
-                n.send("va_cham_da")
-            elif game.players[p].va_cham_da and (players_rect[p].x + 60.5 < 150 or players_rect[p].x >= 276.3):
-                print("het va cham da")
-                n.send("het_va_cham_da")
+            if not game.players[p].on_step and players_rect[p].x + 60.5 >= step1.x and players_rect[p].x < 276.3 and players_rect[p].y < 304:
+                n.send('on_step')
+            elif game.players[p].on_step and (players_rect[p].x + 60.5 < step1.x or players_rect[p].x >= 276.3):
+                n.send("not_on_step")
         else:
-            if not game.players[1].va_cham_da and players_rect[1].x + 60.5 >= 600 and players_rect[1].x < 726.3 and players_rect[1].y < 304:
-                print("va cham da")
-                n.send("va_cham_da")
-            elif game.players[1].va_cham_da and (players_rect[1].x + 60.5 < 600 or players_rect[1].x >= 726.3):
-                print("het va cham da")
-                n.send("het_va_cham_da")
+            if not game.players[1].on_step and players_rect[1].x + 60.5 >= step2.x and players_rect[1].x < 726.3 and players_rect[1].y < 304:
+                n.send('on_step')
+            elif game.players[1].on_step and (players_rect[1].x + 60.5 < step2.x or players_rect[1].x >= 726.3):
+                n.send("not_on_step")
+        draw_health(game.players[p].hp, 20, 20)
+        draw_health(game.players[1 if p == 0 else 0].hp,
+                    width - 400 - 20, 20)
 
         drawBullet(game.players, players_rect, p, n)
 
@@ -144,9 +140,7 @@ def main():
     while run:
         clock.tick(FPS)
         try:
-            # print("Chuan bi game = n.send('get')")
             game = n.send("get")
-            # print("Da game = n.send('get') xong")
         except:
             print("Couldn't get game")
             break
@@ -185,12 +179,10 @@ def main():
                     if keys[pygame.K_LEFT]:
                         action = "left_jump"
                         jump_sound.play()
-                        print("nhay sang trai")
 
                     elif keys[pygame.K_RIGHT]:
                         action = "right_jump"
                         jump_sound.play()
-                        print("nhay sang phai")
                     else:
                         action = "jump"
                         jump_sound.play()

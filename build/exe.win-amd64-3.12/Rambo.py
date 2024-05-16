@@ -61,7 +61,7 @@ class Rambo:
         self.moving_jump = False
         self.bullets = []
         self.hp = 100
-        self.va_cham_da = False
+        self.on_step = False
         self.fallCount = 0
         self.fallDone = True
         self.gunning = False

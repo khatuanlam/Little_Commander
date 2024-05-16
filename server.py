@@ -27,7 +27,7 @@ def drawWindow():
 
 
 server = "localhost"
-port = 3633
+port = 5555
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -62,28 +62,25 @@ def threaded_client(conn, p, gameId):
                     if data != "get":
                         if data == "shoot":
                             game.createBullet(p)
-                        elif data == "va_cham_da":
-                            game.players[p].va_cham_da = True
-                        elif data == "het_va_cham_da":
+                        elif data == "on_step":
+                            game.players[p].on_step = True
+                        elif data == "not_on_step":
                             if p == 0:
-                                game.players[0].va_cham_da = False
+                                game.players[0].on_step = False
                                 game.players[0].fallDone = False
                             if p == 1:
-                                game.players[1].va_cham_da = False
+                                game.players[1].on_step = False
                                 game.players[1].fallDone = False
                         elif data.startswith("bi_ban_boi_dan_"):
                             id_dan = int(data.replace("bi_ban_boi_dan_", ""))
-                            print("Người chơi", p,
-                                  "đã bị bắn bởi đạn số", id_dan)
-                            player_biban = game.players[p]
+                            current_player = game.players[p]
                             for i in range(0, len(game.players)):
                                 for bullet in game.players[i].bullets:
                                     if bullet.id == id_dan:
                                         game.players[i].bullets.remove(bullet)
-                                        print("Đã xóa đạn của người chơi", i)
                                         break
-                            player_biban.hp -= 20
-                            player_biban.hurting = True
+                            current_player.hp -= 20
+                            current_player.hurting = True
                             for i in range(0, len(game.players)):
                                 if game.players[i].hp <= 0:
                                     if i == 0:
@@ -92,10 +89,10 @@ def threaded_client(conn, p, gameId):
                                         game.playerWin = 0
                         elif data == "reset":
                             game.reset()
-                            print("Da reset game --------------")
                         else:
+                            # Cập nhật di chuyển của người chơi
                             game.play(p, data)
-                    game.capNhat()
+                    game.update()
                     game.capNhatDan()
                     conn.sendall(pickle.dumps(game))
             else:
@@ -152,7 +149,7 @@ while is_running:
             is_running = False
             is_shutdown.set()
 
-print("Chuan bi join")
+print("Ready to join")
 accept_thread.join()
 pygame.quit()
 s.close()

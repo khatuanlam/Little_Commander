@@ -61,7 +61,7 @@ class Rambo:
         self.moving_jump = False
         self.bullets = []
         self.hp = 100
-        self.va_cham_da = False
+        self.on_step = False
         self.fallCount = 0
         self.fallDone = True
         self.gunning = False
@@ -119,7 +119,7 @@ class Rambo:
 
     def left_jump(self):
         if self.jumpCount >= -10:
-            if self.va_cham_da and self.jumpCount <= 2:
+            if self.on_step and self.jumpCount <= 2:
                 self.x -= 0
             else:
                 self.x -= 3
@@ -131,7 +131,7 @@ class Rambo:
 
     def right_jump(self):
         if self.jumpCount >= -10:
-            if self.va_cham_da and self.jumpCount <= 2:
+            if self.on_step and self.jumpCount <= 2:
                 self.x += 0
             else:
                 self.x += 3
