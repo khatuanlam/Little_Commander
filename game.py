@@ -18,7 +18,6 @@ class Game:
         self.moving_left = False
         self.moving_right = False
         self.moving_jump = False
-        self.playerWin = -1
         self.players = [self.player0, self.player1]
 
     def update(self):
@@ -42,7 +41,7 @@ class Game:
             if player.hurting:
                 player.hurting_image()
 
-    def play(self, player, move):
+    def move(self, player, move):
         if move == "left_jump":
             self.moving_left = True
             self.moving_jump = True
@@ -77,6 +76,16 @@ class Game:
     def connected(self):
         return self.ready
 
+    def winner(self):
+        playerWin = -1
+        for i in range(len(self.players)):
+            if self.players[i].hp <= 0:
+                if i == 0:
+                    playerWin = 1
+                elif i == 1:
+                    playerWin = 0
+        return playerWin
+
     def createBullet(self, player):
         global idBullet
         if player == 0:
@@ -100,8 +109,6 @@ class Game:
         new_bullet = Bullet(toado_x, current_player.y + 66,
                             current_player.left, new_id)
         current_player.bullets.append(new_bullet)
-        print("Tong so dan cua player", player,
-              "la", len(current_player.bullets))
 
     def capNhatDan(self):
         if len(self.player0.bullets) <= 0 and len(self.player1.bullets) <= 0:

@@ -11,37 +11,10 @@ pygame.init()
 class Rambo:
     def __init__(self, x, y):
         super().__init__()
-        self.img = {0: r'assets\Images\character\Run\0.png',
-                    1: r'assets\Images\character\Run\1.png',
-                    2: r'assets\Images\character\Run\2.png',
-                    3: r'assets\Images\character\Run\3.png',
-                    4: r'assets\Images\character\Run\4.png',
-                    5: r'assets\Images\character\Run\5.png',
-                    6: r'assets\Images\character\Run\6.png',
-                    7: r'assets\Images\character\Run\7.png',
-                    8: r'assets\Images\character\Run\8.png',
-                    9: r'assets\Images\character\Run\9.png',
-                    'jump': r'assets\Images\character\Jump\jump.png'}
-        self.gun_img = {0: r'assets\Images\character\Shot\0.png',
-                        1: r'assets\Images\character\Shot\1.png',
-                        2: r'assets\Images\character\Shot\2.png',
-                        3: r'assets\Images\character\Shot\3.png',
-                        4: r'assets\Images\character\Shot\4.png',
-                        5: r'assets\Images\character\Shot\5.png',
-                        6: r'assets\Images\character\Shot\6.png',
-                        7: r'assets\Images\character\Shot\7.png',
-                        8: r'assets\Images\character\Shot\8.png',
-                        9: r'assets\Images\character\Shot\9.png'}
-        self.hurt_img = {0: r'assets\Images\character\Hurt\0.png',
-                         1: r'assets\Images\character\Hurt\1.png',
-                         2: r'assets\Images\character\Hurt\2.png',
-                         3: r'assets\Images\character\Hurt\3.png',
-                         4: r'assets\Images\character\Hurt\4.png',
-                         5: r'assets\Images\character\Hurt\5.png',
-                         6: r'assets\Images\character\Hurt\6.png',
-                         7: r'assets\Images\character\Hurt\7.png',
-                         8: r'assets\Images\character\Hurt\8.png',
-                         9: r'assets\Images\character\Hurt\9.png'}
+        self.img = self.get_img('Run')
+        self.gun_img = self.get_img('Shot')
+        self.hurt_img = self.get_img('Hurt')
+        self.jump_img = r'assets\Images\character\Jump\jump.png'
         self.index_gun_img = 0
         self.index_img = 0
         self.index_hurt_img = 0
@@ -67,6 +40,9 @@ class Rambo:
         self.gunning = False
         self.hurting = False
 
+    def get_img(self, action):
+        return {i: fr'assets\Images\character\{action}\{i}.png' for i in range(10)}
+
     def update(self, moving_left, moving_right, moving_jump):
         if moving_left and moving_jump:
             self.left_jumping = True
@@ -83,21 +59,15 @@ class Rambo:
         elif moving_jump:
             self.jumping = True
 
-        # Đổi index ảnh khi di chuyển
+        # Đổi index ảnh khi di chuyển để k bị hết ảnh
         if self.index_img < 0:
             self.index_img = 9
         if self.index_img > 9:
             self.index_img = 0
 
-        # Giới hạn màn hìhh
-        if self.x < self.vel:
-            self.x = 0
-        if self.x > width - self.width:
-            self.x = width - self.width
-        if self.y < self.vel:
-            self.y = 0
-        if self.y > height - self.width - 125:
-            self.y = height - self.width - 125
+        # Giới hạn màn hình
+        self.x = max(0, min(self.x, width - self.width))
+        self.y = max(0, min(self.y, height - self.width - 125))
 
     def jump(self):
         if self.jumpCount >= -10:
