@@ -16,15 +16,21 @@ Little Commander is a two-player shooting game that can be played over a LAN con
 
 ## Installation
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install PyGame.
-
+Clone the repository by running the following command in your terminal:
 ```bash
-pip install pygame
+git clone https://github.com/khatuanlam/Little_Commander.git
 ```
 Update Python's latest version
 ```bash
 python --version
 ```
+
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to install PyGame.
+```bash
+pip install pygame
+```
+
+
 
 ## Usage
 

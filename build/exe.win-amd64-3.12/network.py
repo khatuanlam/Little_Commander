@@ -7,8 +7,8 @@ class Network:
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # self.client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.server = "localhost"
-        self.port = 3633
-        self.addr = (self.server, self.port)
+        self.port = 5555
+        self.address = (self.server, self.port)
         self.post = self.connect()
 
     def getPost(self):
@@ -16,7 +16,7 @@ class Network:
 
     def connect(self):
         try:
-            self.client.connect(self.addr)
+            self.client.connect(self.address)
             print("Server Connected")
             return self.client.recv(4094 * 2).decode()
         except:

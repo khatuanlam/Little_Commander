@@ -18,46 +18,30 @@ class Game:
         self.moving_left = False
         self.moving_right = False
         self.moving_jump = False
-        self.playerWin = -1
         self.players = [self.player0, self.player1]
 
-    def capNhat(self):
-        if self.player0.left_jumping:
-            self.player0.left_jump()
-        elif self.player0.right_jumping:
-            self.player0.right_jump()
-        elif self.player0.jumping:
-            self.player0.jump()
+    def update(self):
+        for player in self.players:
+            if player.left_jumping:
+                player.left_jump()
+            elif player.right_jumping:
+                player.right_jump()
+            elif player.jumping:
+                player.jump()
+            # Cập nhật độ cao khi đứng trên đá
+            if player.on_step:
+                player.y = 322
+            # Cập nhật vị trí khi nhân vật rơi xuống đất
+            if not player.fallDone:
+                player.fall()
 
-        if self.player1.left_jumping:
-            self.player1.left_jump()
-        elif self.player1.right_jumping:
-            self.player1.right_jump()
-        elif self.player1.jumping:
-            self.player1.jump()
+            if player.gunning:
+                player.gunning_image()
 
-        # Nếu nằm trên step thì cập nhật vị trí cho nhân vật
-        if self.player0.va_cham_da:
-            self.player0.y = 322
-        if self.player1.va_cham_da:
-            self.player1.y = 322
+            if player.hurting:
+                player.hurting_image()
 
-        if not self.player0.fallDone:
-            self.player0.fall()
-        if not self.player1.fallDone:
-            self.player1.fall()
-
-        if self.player0.gunning:
-            self.player0.gunning_image()
-        if self.player1.gunning:
-            self.player1.gunning_image()
-
-        if self.player0.hurting:
-            self.player0.hurting_image()
-        if self.player1.hurting:
-            self.player1.hurting_image()
-
-    def play(self, player, move):
+    def move(self, player, move):
         if move == "left_jump":
             self.moving_left = True
             self.moving_jump = True
@@ -76,7 +60,7 @@ class Game:
             self.moving_right = False
         else:
             pass
-
+        # Cập nhật hành động cho nhân vật của người chơi
         for i in range(0, len(self.players)):
             if player == i:
                 self.players[i].update(
@@ -92,16 +76,24 @@ class Game:
     def connected(self):
         return self.ready
 
+    def winner(self):
+        playerWin = -1
+        for i in range(len(self.players)):
+            if self.players[i].hp <= 0:
+                if i == 0:
+                    playerWin = 1
+                elif i == 1:
+                    playerWin = 0
+        return playerWin
+
     def createBullet(self, player):
         global idBullet
         if player == 0:
             current_player = self.player0
             current_player.gunning = True
-            print("Da gan gunning la True")
         elif player == 1:
             current_player = self.player1
             current_player.gunning = True
-            print("Da gan gunning la True")
         else:
             raise ValueError("Invalid player ID")
 
@@ -117,10 +109,6 @@ class Game:
         new_bullet = Bullet(toado_x, current_player.y + 66,
                             current_player.left, new_id)
         current_player.bullets.append(new_bullet)
-        print("Id dan vua tao la: ", new_bullet.id)
-        print("Toa do dan vua tao la: ", new_bullet.x, new_bullet.y)
-        print("Tong so dan cua player", player,
-              "la", len(current_player.bullets))
 
     def capNhatDan(self):
         if len(self.player0.bullets) <= 0 and len(self.player1.bullets) <= 0:
@@ -137,14 +125,12 @@ class Game:
         global idBullet
         self.player0.reset()
         self.player1.reset()
-        self.player0.x, self.player0.y = 0, 460
-        self.player1.x, self.player1.y = 886.5, 460
+        self.player0.x, self.player0.y = (0, 460)
+        self.player1.x, self.player1.y = (886.5, 460)
         self.ready = False
         self.moving_left = False
         self.moving_right = False
         self.moving_jump = False
-        self.players = list()
-        self.players.append(self.player0)
-        self.players.append(self.player1)
+        self.players = [self.player0, self.player1]
         self.playerWin = -1
         idBullet = 0
